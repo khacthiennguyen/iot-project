@@ -36,13 +36,13 @@ require("./routes/sensorRoute")(app);
 
 
 
-// app.get('/Login', (req, res) => {
-//     res.render('login')
-// })
+app.get('/Login', (req, res) => {
+    res.render('login')
+})
 
-// app.get('/Admin', (req, res) => {
-//     res.render('admin')
-// })
+app.get('/Admin', (req, res) => {
+    res.render('admin')
+})
 
 app.listen(8089, () => {
     console.log('Port 8089 đang chạy!')
