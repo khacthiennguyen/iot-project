@@ -27,4 +27,4 @@ module.exports = app => {
 
     
     app.use('/api/sensor', router);
-  };
+  }
