@@ -36,9 +36,9 @@ require("./routes/sensorRoute")(app);
 
 
 
-app.get('/Login', (req, res) => {
-    res.render('login')
-})
+// app.get('/Login', (req, res) => {
+//     res.render('login')
+// })
 
 app.get('/Admin', (req, res) => {
     res.render('admin')
