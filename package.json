@@ -1,0 +1,18 @@
+{
+  "name": "iot",
+  "version": "1.0.0",
+  "description": "day la web app iot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "khthien",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "moment": "^2.30.1",
+    "mongoose": "^8.2.1"
+  }
+}
