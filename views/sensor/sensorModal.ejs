@@ -1,203 +1,125 @@
-
-   <!-- Main content -->
-                <div class="modal fade" id="modal-default">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Default Modal</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p>One fine body&hellip;</p>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
+<!-- Main content -->
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Default Modal</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Day</label>
+                            <input type="text" class="form-control" id="day"
+                            data-provide="datepicker"
+                            data-date-format="dd/mm/yyyy"
+                            placeholder="dd-mm-yyyy">
                         </div>
-                        <!-- /.modal-content -->
+                        
                     </div>
-                    <!-- /.modal-dialog -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Time</label>
+                            <input type="time" class="form-control" id="time" step="60" pattern="[0-2][0-9]:[0-5][0-9]">
+                        </div>
+                        
+                    </div>
                 </div>
-                <!-- /.modal -->
-
-            </section>
-            <!-- /.content -->
+            
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Temperature</label>
+                            <input type="text" class="form-control" id="temperature">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Humidity</label>
+                            <input type="text" class="form-control" id="humidity">
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" class="form-control" id="location">
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="add-sensor">Save changes</button>
+            </div>
         </div>
-        <!-- /.content-wrapper -->
+
 
     </div>
-    <!-- ./wrapper -->
+    <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
-    <!-- jQuery -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
-    <!-- Toastr -->
-    <script src="../../plugins/toastr/toastr.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../../dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="../../dist/js/demo.js"></script>
-    <!-- Page specific script -->
-    <script>
-        $(function () {
-            var Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
 
-            $('.swalDefaultSuccess').click(function () {
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.swalDefaultInfo').click(function () {
-                Toast.fire({
-                    icon: 'info',
-                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.swalDefaultError').click(function () {
-                Toast.fire({
-                    icon: 'error',
-                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.swalDefaultWarning').click(function () {
-                Toast.fire({
-                    icon: 'warning',
-                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.swalDefaultQuestion').click(function () {
-                Toast.fire({
-                    icon: 'question',
-                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
+</div>
+<!-- ./wrapper -->
 
-            $('.toastrDefaultSuccess').click(function () {
-                toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-            });
-            $('.toastrDefaultInfo').click(function () {
-                toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-            });
-            $('.toastrDefaultError').click(function () {
-                toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-            });
-            $('.toastrDefaultWarning').click(function () {
-                toastr.warning('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-            });
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- Toastr -->
+<script src="../../plugins/toastr/toastr.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<!-- Page specific script -->
 
-            $('.toastsDefaultDefault').click(function () {
-                $(document).Toasts('create', {
-                    title: 'Toast Title',
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultTopLeft').click(function () {
-                $(document).Toasts('create', {
-                    title: 'Toast Title',
-                    position: 'topLeft',
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultBottomRight').click(function () {
-                $(document).Toasts('create', {
-                    title: 'Toast Title',
-                    position: 'bottomRight',
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultBottomLeft').click(function () {
-                $(document).Toasts('create', {
-                    title: 'Toast Title',
-                    position: 'bottomLeft',
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultAutohide').click(function () {
-                $(document).Toasts('create', {
-                    title: 'Toast Title',
-                    autohide: true,
-                    delay: 750,
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultNotFixed').click(function () {
-                $(document).Toasts('create', {
-                    title: 'Toast Title',
-                    fixed: false,
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultFull').click(function () {
-                $(document).Toasts('create', {
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.',
-                    title: 'Toast Title',
-                    subtitle: 'Subtitle',
-                    icon: 'fas fa-envelope fa-lg',
-                })
-            });
-            $('.toastsDefaultFullImage').click(function () {
-                $(document).Toasts('create', {
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.',
-                    title: 'Toast Title',
-                    subtitle: 'Subtitle',
-                    image: '../../dist/img/user3-128x128.jpg',
-                    imageAlt: 'User Picture',
-                })
-            });
-            $('.toastsDefaultSuccess').click(function () {
-                $(document).Toasts('create', {
-                    class: 'bg-success',
-                    title: 'Toast Title',
-                    subtitle: 'Subtitle',
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultInfo').click(function () {
-                $(document).Toasts('create', {
-                    class: 'bg-info',
-                    title: 'Toast Title',
-                    subtitle: 'Subtitle',
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultWarning').click(function () {
-                $(document).Toasts('create', {
-                    class: 'bg-warning',
-                    title: 'Toast Title',
-                    subtitle: 'Subtitle',
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultDanger').click(function () {
-                $(document).Toasts('create', {
-                    class: 'bg-danger',
-                    title: 'Toast Title',
-                    subtitle: 'Subtitle',
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
-            $('.toastsDefaultMaroon').click(function () {
-                $(document).Toasts('create', {
-                    class: 'bg-maroon',
-                    title: 'Toast Title',
-                    subtitle: 'Subtitle',
-                    body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-                })
-            });
+
+
+<script>
+    $(document).ready(function () {
+//mặc định ngày giờ thì nó ra ,giờ nó ra . nhunwhg mặc định kiểu đó đéo có định dạng ngày tháng năm 
+        moment.locale();
+        // Sự kiện khi modal được mở
+        $('#modal-default').on('show.bs.modal', function () {
+            // Lấy ngày và giờ hiện tại sử dụng Moment.js
+            var currentDateTime = moment();
+            var formattedDate = currentDateTime.format('DD/MM/YYYY');
+            console.log('Current DateTime:', currentDateTime.format('DD/MM/YYYY HH:mm'));//ko phải , cả 3 đều vừa gọi hàm vừa điền vào
+            // Đặt giá trị cho trường ngày và giờ 
+            $('#day').val(formattedDate); 
+            $('#time').val(currentDateTime.format('HH:mm'));
         });
-    </script>
+
+        // Sự kiện khi nút "Save changes" được click
+        $('#add-sensor').click(function () {
+            // Lấy giá trị từ các trường input
+            var dateValue = $('#day').val();
+            var timeValue = $('#time').val();
+            var temperatureValue = $('#temperature').val();
+            var humidityValue = $('#humidity').val();
+            var locationValue = $('#location').val();
+
+            // TODO: Thực hiện các xử lý với giá trị đã lấy được
+
+            // Đóng modal
+            $('#modal-default').modal('hide');
+        });
+    });
+</script>
+
+
 </body>
 
 </html>
