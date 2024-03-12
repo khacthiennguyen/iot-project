@@ -31,14 +31,19 @@ app.get("/", (req, res) => {
     res.json({ message: "Chào mừng đến API cảm biến!" });
 });
 
-require("./routes/sensorRoute")(app);
 
 
+app.get("/sensor", (req, res) => {
+    res.render('sensor/index')
+});
 
 
 // app.get('/Login', (req, res) => {
 //     res.render('login')
 // })
+
+require("./routes/sensorRoute")(app);
+
 
 app.get('/Admin', (req, res) => {
     res.render('admin')
