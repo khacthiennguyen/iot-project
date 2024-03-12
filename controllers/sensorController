@@ -19,7 +19,7 @@ exports.create = (req, res) => {
     time: moment().format("LT"), //21:07
     temperature: req.body.temperature,
     humidity: req.body.humidity,
-    location: req.body.localtion,
+    location: req.body.location,
   });
 
   // Save đối tượng cảm biến đó vào trong db
