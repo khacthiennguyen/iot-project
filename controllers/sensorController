@@ -15,8 +15,10 @@ exports.create = (req, res) => {
 
   // Tạo 1 đối tượng cảm biến
   const sensor = new Sensor({
-    day: moment().format("L"), //11/04/2023
-    time: moment().format("LT"), //21:07
+    // day: moment().format("L"),
+    // time: moment().format("LT"),
+    day: req.body.day,
+    time:req.body.time,
     temperature: req.body.temperature,
     humidity: req.body.humidity,
     location: req.body.location,

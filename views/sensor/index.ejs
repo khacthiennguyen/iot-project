@@ -47,7 +47,7 @@
                       <th>Action</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="table-sensor-list" >
                     <tr>
                       <td>Trident</td>
                       <td>Internet
@@ -107,8 +107,37 @@
 
 
   <%- include('./sensorModal.ejs') %>
-  
+
   <%- include('../layout/footer.ejs') %>
+
+  <script>
+    function getList() {
+        $.ajax({
+          url: 'http://localhost:8089/api/sensor',
+          type: 'get',
+          dataType: 'JSON'
+        }).done(function (result) {
+          resData = "";
+          result.forEach(el => {
+            resData += 
+            "<tr id= " + el.id + "> <td>" + el.day + "</td><td>" + el.time + "</td>" +
+              "<td>" + el.temperature + "</td>" +
+              "<td>" + el.humidity + "</td>" +
+              "<td>" + el.location + "</td>" +
+              "</tr>";
+          });
+
+          $("#table-sensor-list").html(resData);
+
+        });
+      }
+
+
+  </script>
+
+
+
+
 
     <!-- DataTables  & Plugins -->
     <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
