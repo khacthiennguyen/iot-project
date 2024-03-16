@@ -168,6 +168,7 @@
             })
               .then(function (response) {
                 loadSensorData();
+                $("#modal-default").modal("hide");
               })
               .catch(function (error) {
                 console.error("Yêu cầu Axios thất bại:", error);
@@ -220,6 +221,7 @@
                 .then(function (response) {
                   loadSensorData();
                   resetModalForm();
+                  $("#modal-default").modal("hide");
                 })
                 .catch(function (error) {
                   console.error("Yêu cầu Axios thất bại:", error);
