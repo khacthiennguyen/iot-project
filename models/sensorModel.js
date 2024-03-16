@@ -7,7 +7,8 @@ module.exports = (mongoose) => {
             time: String,
             temperature: String,
             humidity: String,
-            location: String
+            location: String,
+            enable: Boolean
 
         },
         { timestamps: true }
