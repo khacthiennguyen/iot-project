@@ -48,17 +48,14 @@
                     </tr>
                   </thead>
                   <tbody id="table-sensor-list">
-                    <tr>
+                    <!-- <tr>
                       <td>Trident</td>
-                      <td>Internet
-                        Explorer 4.0
-                      </td>
+                      <td>Internet Explorer 4.0</td>
                       <td>Win 95+</td>
                       <td> 4</td>
                       <td>X</td>
                       <td>Action</td>
-                    </tr>
-
+                    </tr> -->
                   </tbody>
                   <tfoot>
                     <tr>
@@ -85,78 +82,187 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+  <!-- Modal content -->
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Default Modal</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Day</label>
+                <input type="text" class="form-control" id="day" data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                  placeholder="dd-mm-yyyy">
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Time</label>
+                <input type="time" class="form-control" id="time" step="60" pattern="[0-2][0-9]:[0-5][0-9]">
+              </div>
+
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Temperature</label>
+                <input type="text" class="form-control" id="temperature">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Humidity</label>
+                <input type="text" class="form-control" id="humidity">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" class="form-control" id="location">
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="add-sensor">Save changes</button>
+        </div>
+      </div>
 
 
-    <%- include('./sensorModal.ejs') %>
-    <%- include('../layout/footer.ejs') %>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
 
-      <script>
-        $(document).ready(function () {
-          function getList() {
-        $.ajax({
-          url: 'http://localhost:8089/api/sensor',
-          type: 'get',
-          dataType: 'JSON'
-        }).done(function (result) {
-          resData = "";
-          result.forEach(el => {
-            resData += 
-            "<tr id= " + el.id + "> <td>" + el.day + "</td><td>" + el.time + "</td>" +
-              "<td>" + el.temperature + "</td>" +
-              "<td>" + el.humidity + "</td>" +
-              "<td>" + el.location + "</td>" +
-              "</tr>";
-          });
+  </section>
+  <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
 
-          $("#table-sensor-list").html(resData);
+  </div>
 
+  <%- include('../layout/footer.ejs') %>
+
+    <script>
+      $(document).ready(function () {
+
+        var dataTable;
+        function getList() {
+          axios.get('http://localhost:8089/api/sensor')
+            .then(function (response) {
+              var data = response.data;
+              if (dataTable) {
+                // Nếu đã tồn tại dataTable, hủy nó trước khi tạo mới
+                dataTable.destroy();
+              }
+              // Xây dựng bảng DataTable
+              dataTable = $('#example1').DataTable({
+                data: data,
+                columns: [
+                  { data: 'day' },
+                  { data: 'time' },
+                  { data: 'temperature' },
+                  { data: 'humidity' },
+                  { data: 'location' },
+                  {
+                    data: null, render: function (data, type, row) {
+                      return '<button id="update-sensor" class="btn btn-primary">Edit</button>' + "  " +
+                        '<button id="deactive-sensor" class="btn btn-danger">Delete</button>';
+                    }
+                  }
+                ],
+
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "info": true,
+                "ordering": true,
+                "paging": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                "language": {
+                  "emptyTable": "No data available in table"
+                }
+              }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            })
+            .catch(function (error) {
+              console.error('Lỗi khi gửi yêu cầu:', error);
+            });
+        }
+        // Gọi hàm getList() để lấy dữ liệu từ máy chủ
+        getList();
+
+        moment.locale();
+        // Sự kiện khi modal được mở //cái modal là cái form
+        $('#modal-default').on('show.bs.modal', function () {
+          // Lấy ngày và giờ hiện tại sử dụng Moment.js
+          var currentDateTime = moment();
+          var formattedDate = currentDateTime.format('DD/MM/YYYY');
+          console.log('Current DateTime:', currentDateTime.format('DD/MM/YYYY HH:mm'));
+          // Đặt giá trị cho trường ngày và giờ 
+          $('#day').val(formattedDate);
+          $('#time').val(currentDateTime.format('HH:mm'));
         });
-      }
 
+        // Sự kiện khi nút "Save changes" được click
+        $('#add-sensor').click(function () {
+          if ($('#temperature').val() === '') {
+            alert('Nhiệt độ không thể trống.');
+            return;
+          }
+          // Sử dụng Axios để thực hiện yêu cầu POST
+          axios.post("http://localhost:8089/api/sensor/", {
+            'day': $('#day').val(),
+            'time': $('#time').val(),
+            'temperature': $('#temperature').val(),
+            'humidity': $('#humidity').val(),
+            'location': $('#location').val(),
+          })
+            .then(function (response) {
+              console.log($('#location').val())
+              // Xử lý thành công
+              // alert("Thêm thành công");
+              // $('#modal-default').modal('hide'); 
+              getList();
+
+
+            })
+            .catch(function (error) {
+              // Xử lý lỗi
+              console.error("Yêu cầu Axios thất bại:", error);
+              console.log("Thông điệp lỗi từ server:", error.response.data);
+            })
+            .finally(function () {
+              // Đóng modal dù có thành công hay thất bại
+
+            });
         });
 
-      </script>
 
+      });
+    </script>
 
-      <!-- DataTables  & Plugins -->
-      <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-      <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-      <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-      <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-      <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-      <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-      <script src="../../plugins/jszip/jszip.min.js"></script>
-      <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
-      <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
-      <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-      <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-      <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-      <!-- AdminLTE App -->
-      <script src="../../dist/js/adminlte.min.js"></script>
-      <!-- AdminLTE for demo purposes -->
-      <script src="../../dist/js/demo.js"></script>
-
-      <!-- Page specific script -->
-      <script>
-        $(function () {
-          $("#example1").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "info": true,
-            "ordering": true,
-            "paging": true,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-          }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-        });
-      </script>
-
-
-
-
-
-
-      </body>
-
-      </html>
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="../../plugins/jszip/jszip.min.js"></script>
+<script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+<script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    </body>
+    </html>
