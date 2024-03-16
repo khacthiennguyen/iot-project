@@ -15,13 +15,12 @@ exports.create = (req, res) => {
 
   // Tạo 1 đối tượng cảm biến
   const sensor = new Sensor({
-    // day: moment().format("L"),
-    // time: moment().format("LT"),
     day: req.body.day,
     time:req.body.time,
     temperature: req.body.temperature,
     humidity: req.body.humidity,
     location: req.body.location,
+    enable: true,
   });
 
   // Save đối tượng cảm biến đó vào trong db
@@ -55,6 +54,23 @@ exports.findAll = (req, res) => {
       });
     });
 };
+
+
+exports.findAllActivate = (req, res) => {
+  const day = req.query.day;
+  var condition = day ? { day: { $regex: new RegExp(day), $options: "i" }, enable: true } : { enable: true };
+  Sensor.find(condition)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Có lỗi trong khi tìm ngày nhận",
+      });
+    });
+};
+
+
 //Retrieve a single object
 //Find a single CamBien with an id
 exports.findOne = (req, res) => {

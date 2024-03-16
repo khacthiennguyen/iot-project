@@ -74,6 +74,8 @@
   </div>
   <!-- /.content-wrapper -->
   <!-- modal sensor -->
+
+
   <%- include('../sensor/modalSensor.ejs') %>
     <!-- /modal sensor -->
     </div>
@@ -97,7 +99,7 @@
 
           function loadSensorData() {
             // Gọi API để lấy dữ liệu sensor
-            axios.get("http://localhost:8089/api/sensor/")
+            axios.get("http://localhost:8089/api/sensor/activate")
               .then(function (response) {
                 // Xóa dữ liệu cũ trong bảng
                 $("#sensor-table tbody").empty();
@@ -148,6 +150,8 @@
             $('.modal-title-add').show();
 
           });
+
+
 
 
           $('#add-sensor').click(function () {
@@ -226,13 +230,52 @@
                   // $('#modal-default').modal('hide');
                 });
             });
-
-
-
           });
 
 
+          // delete sensor
+          $("#sensor-table").on("click", ".delete-sensor", function () {
+            sensorIdObject.id = $(this).closest("tr").data("id");
+            console.log("ID của sensor cần xóa là:", sensorIdObject.id);
+            // Gọi API để lấy thông tin của sensor với id tương ứng
+            axios.get("http://localhost:8089/api/sensor/" + sensorIdObject.id)
+              .then(function (response) {
+                // Hiển thị thông tin của sensor trong modal xác nhận xóa
+                var sensorData = response.data;
+                console.log(sensorData)
+                $("#sensorInfo").html("Bạn có muốn xóa Sensor tại:<br>" + 
+                      "Day: " + sensorData.day + "<br>" +
+                      "Time: " + sensorData.time + "<br>" +
+                      "Temperature: " + sensorData.temperature + "<br>" +
+                      "Humidity: " + sensorData.humidity + "<br>" +
+                      "Location: " + sensorData.location + "?");
+                // Hiển thị modal xác nhận xóa
+                $("#deleteSensorModal").modal("show");
 
+
+                
+              })
+              .catch(function (error) {
+                console.error("Yêu cầu Axios thất bại:", error);
+              });
+
+              $('#confirmDelete').click(function () {
+              axios.put("http://localhost:8089/api/sensor/" + sensorIdObject.id, {
+                'enable': 'false',
+              })
+                .then(function (response) {
+                  $("#deleteSensorModal").modal("hide");
+                })
+                .catch(function (error) {
+                  console.error("Yêu cầu Axios thất bại:", error);
+                  console.log("Thông điệp lỗi từ server:", error.response.data);
+                })
+                .finally(function () {
+                  loadSensorData();
+                  
+                });
+            });
+          });
 
 
 
