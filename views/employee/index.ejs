@@ -1,0 +1,307 @@
+<%- include('../layout/header.ejs') %>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Employee</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item active">Employee</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <!-- add-buton call modal-default -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#modal-default">
+                                        Add Employee
+                                    </button>
+                                    <!-- /add-buton call modal-default -->
+                                </h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-header">
+                                <table id="employee-table" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee ID</th>
+                                            <th>Employee Name</th>
+                                            <th>Employee Phone</th>
+                                            <th>Employee Password</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Dữ liệu từ API sẽ được điền vào đây -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Employee ID</th>
+                                            <th>Employee Name</th>
+                                            <th>Employee Phone</th>
+                                            <th>Employee Password</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- modal employee -->
+
+
+    <%- include('../employee/modalEmployee.ejs') %>
+        <!-- /modal employee -->
+        </div>
+        </div>
+        <!-- /.modal -->
+
+        </section>
+        <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        </div>
+        <%- include('../layout/footer.ejs') %>
+            <%- include('../component/statusload.ejs') %>
+
+                <script>
+                    $(document).ready(function () {
+                        function showSuccessToast() {
+                            $('.toast').toast('show');
+                        }
+
+                        // Ẩn toast sau khi một khoảng thời gian
+                        function hideSuccessToastAfterDelay() {
+                            setTimeout(function () {
+                                $('.toast').toast('hide');
+                            }, 3000); // 3000 milliseconds = 3 giây
+                        }
+
+
+                        // Đối tượng để lưu trữ idemployee
+                        var employeeIdObject = {
+                            id: null
+                        };
+
+                        function loadEmployeeData() {
+                            // Gọi API để lấy dữ liệu employee
+                            axios.get("http://localhost:8089/api/employee/activate")
+                                .then(function (response) {
+                                    // Xóa dữ liệu cũ trong bảng
+                                    $("#employee-table tbody").empty();
+                                    // Duyệt qua mỗi employee trong dữ liệu API và thêm vào bảng
+                                    response.data.forEach(function (employee) {
+                                        var row = `<tr data-id="${employee.id}">
+                      <td>${employee.employeeId}</td>
+                      <td>${employee.employeeName}</td>
+                      <td>${employee.employeePhone}</td>
+                      <td>${employee.employeePassword}</td>
+                      <td>
+                        <button class="btn btn-info btn-sm edit-employee">Sửa</button>
+                        <button class="btn btn-danger btn-sm delete-employee">Xóa</button>
+                      </td>
+                    </tr>`;
+                                        $("#employee-table tbody").prepend(row);
+                                    });
+                                })
+                                .catch(function (error) {
+                                    console.error("Yêu cầu Axios thất bại:", error);
+                                });
+                        }
+
+                        // Gọi hàm để tải dữ liệu vào bảng khi trang được tải
+                        loadEmployeeData();
+
+                        function resetModalForm() {
+                            // Đặt giá trị mặc định cho các trường nhập liệu trong modal
+                            $('#employeeId').val('');
+                            $('#employeeName').val('');
+                            $('#employeePhone').val('');
+                            $('#employeePassword').val('');
+                        }
+
+                        $('#modal-default').on('show.bs.modal', function () {
+                            resetModalForm();
+
+                            $('#add-employee').show();
+                            $('#update-employee').hide();
+
+                            $('.modal-title-edit').hide();
+                            $('.modal-title-add').show();
+
+                        });
+
+
+                        $('#add-employee').click(function () {
+                            if ($('#employeeId').val() === '') {
+                                alert('Employee ID không thể trống');
+                                return;
+                            }
+                            if ($('#employeeName').val() === '') {
+                                alert('Name không thể trống.');
+                                return;
+                            }
+                            if ($('#employeePassword').val() === '') {
+                                alert('Password không thể trống.');
+                                return;
+                            }
+                            axios.post("http://localhost:8089/api/employee/", {
+                                'employeeId': $('#employeeId').val(),
+                                'employeeName': $('#employeeName').val(),
+                                'employeePhone': $('#employeePhone').val(),
+                                'employeePassword': $('#employeePassword').val(),
+                            })
+                                .then(function (response) {
+                                    loadEmployeeData();
+                                    // $("#modal-default").modal("hide");
+                                    // $('.swalDefaultSuccess').click();
+                                    alert('Thêm employee thành công!')
+
+                                })
+                                .catch(function (error) {
+                                    console.error("Yêu cầu Axios thất bại:", error);
+                                    console.log("Thông điệp lỗi từ server:", error.response.data);
+                                })
+                                .finally(function () {
+                                    // $('#modal-default').modal('hide');
+                                });
+                        });
+
+                        //click vào nút "Edit" ... update 
+                        $("#employee-table").on("click", ".edit-employee", function () {
+                            resetModalForm()
+                            employeeIdObject.id = $(this).closest("tr").data("id");
+                            console.log(employeeIdObject.id)
+                            // Gọi API  lấy thông tin của employee cần chỉnh sửa với id tương ứng
+                            axios.get("http://localhost:8089/api/employee/" + employeeIdObject.id)
+                                .then(function (response) {
+                                    $("#modal-default").modal("show");
+                                    var employeeData = response.data;
+                                    // Điền thông tin employee vào các trường nhập liệu của modal
+                                    $("#employeeId").val(employeeData.employeeId);
+                                    $("#employeeName").val(employeeData.employeeName);
+                                    $("#employeePhone").val(employeeData.employeePhone);
+                                    $("#employeePassword").val(employeeData.employeePassword);
+
+                                    $('#add-employee').hide();
+                                    $('#update-employee').show();
+                                    $('.modal-title-edit').show();
+                                    $('.modal-title-add').hide();
+
+                                })
+                                .catch(function (error) {
+                                    console.error("Yêu cầu Axios thất bại:", error);
+                                });
+
+                            $('#update-employee').click(function () {
+                                if ($('#employeeId').val() === '') {
+                                    alert('Employee ID không thể trống');
+                                    return;
+                                }
+                                if ($('#employeeName').val() === '') {
+                                    alert('Name không thể trống.');
+                                    return;
+                                }
+                                if ($('#employeePassword').val() === '') {
+                                    alert('Password không thể trống.');
+                                    return;
+                                }
+                                axios.put("http://localhost:8089/api/employee/" + employeeIdObject.id, {
+                                    'employeeId': $('#employeeId').val(),
+                                    'employeeName': $('#employeeName').val(),
+                                    'employeePhone': $('#employeePhone').val(),
+                                    'employeePassword': $('#employeePassword').val(),
+                                })
+                                    .then(function (response) {
+                                        loadEmployeeData();
+                                        $("#modal-default").modal("hide");
+                                        resetModalForm();
+                                        // $('.swalDefaultSuccess').click();
+                                        // showSuccessToast(); // Hiển thị toast thành công
+                                        // hideSuccessToastAfterDelay(); // Ẩn toast sau 3 giây
+                                    })
+                                    .catch(function (error) {
+                                        console.error("Yêu cầu Axios thất bại:", error);
+                                        console.log("Thông điệp lỗi từ server:", error.response.data);
+                                    })
+                                    .finally(function () {
+                                        loadEmployeeData();
+                                        // $('#modal-default').modal('hide');
+                                    });
+                            });
+                        });
+
+
+                        // delete employee
+                        $("#employee-table").on("click", ".delete-employee", function () {
+                            employeeIdObject.id = $(this).closest("tr").data("id");
+                            console.log("ID của employee cần xóa là:", employeeIdObject.id);
+                            // Gọi API để lấy thông tin của employee với id tương ứng
+                            axios.get("http://localhost:8089/api/employee/" + employeeIdObject.id)
+                                .then(function (response) {
+                                    // Hiển thị thông tin của employee trong modal xác nhận xóa
+                                    var employeeData = response.data;
+                                    console.log(employeeData)
+                                    $("#employeeInfo").html("Bạn có muốn xóa Employee:<br>" +
+                                        "ID: " + employeeData.employeeId + "<br>" +
+                                        "Name: " + employeeData.employeeName + "<br>" +
+                                        "Phone: " + employeeData.employeePhone+ "<br>" +
+                                        "Password: " + employeeData.employeePassword + "<br>" )
+                                    // Hiển thị modal xác nhận xóa
+                                    $("#deleteEmployeeModal").modal("show");
+
+                                })
+                                .catch(function (error) {
+                                    console.error("Yêu cầu Axios thất bại:", error);
+                                });
+
+                            $('#confirmDelete').click(function () {
+                                axios.put("http://localhost:8089/api/employee/" + employeeIdObject.id, {
+                                    'enable': 'false',
+                                })
+                                    .then(function (response) {
+                                        $("#deleteEmployeeModal").modal("hide");
+                                    })
+                                    .catch(function (error) {
+                                        console.error("Yêu cầu Axios thất bại:", error);
+                                        console.log("Thông điệp lỗi từ server:", error.response.data);
+                                    })
+                                    .finally(function () {
+                                        loadEmployeeData();
+
+                                    });
+                            });
+                        });
+
+                    });
+
+
+                </script>
+                </body>
+
+                </html>
