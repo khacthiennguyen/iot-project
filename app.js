@@ -18,8 +18,6 @@ db.mongoose.connect(db.url, {}).then(() => {
         console.log("Cannot connect to the database!", err);
         process.exit();
     });
-
-
 app.use(express.json());
 
 // simple route
@@ -33,8 +31,10 @@ app.get("/sensor", (req, res) => {
 });
 
 
+//api Employee
+require("./routes/employeeRoute")(app)
+//api Sensor
 require("./routes/sensorRoute")(app);
-
 
 app.get('/Admin', (req, res) => {
     res.render('admin')

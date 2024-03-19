@@ -1,9 +1,9 @@
 const dbConfig = require("../config.js");
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-
 const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
 db.sensor = require("./sensorModel.js")(mongoose);
+db.employee = require("./employeeModel.js")(mongoose);
 module.exports = db;
