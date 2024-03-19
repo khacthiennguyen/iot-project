@@ -30,6 +30,10 @@ app.get("/sensor", (req, res) => {
     res.render('sensor/index')
 });
 
+app.get("/employee", (req, res) => {
+    res.render('employee/index')
+});
+
 
 //api Employee
 require("./routes/employeeRoute")(app)
